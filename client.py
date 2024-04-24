@@ -32,6 +32,16 @@ class EditClientIn(BaseModel):
 class CreateClientIn(EditClientIn):
     external_id: Optional[str] = Field()
 
+
+class CreateClientOut(BaseModel):
+    external_id: Optional[str] = Field(alias="externalId")
+    username: str = Field()
+    first_name: str = Field(alias="firstName")
+    last_name: str = Field(alias="lastName")
+    email: EmailStr = Field()
+    phone: str = Field()
+    location: Optional[LocationIn] = Field(default_factory=LocationIn)
+
 # -------------------------------------------------------------------------------------------------
 
 
@@ -70,7 +80,7 @@ async def create_client_form(request: Request):
     return template
 
 
-@router.post("/client", response_class=Response)
+@router.post("/client", response_model=CreateClientOut)
 async def create_client(
         external_id: str = Form(...),
         username: str = Form(...),
@@ -106,4 +116,6 @@ async def create_client(
     )
     res = session.post(f"{base_url}/client", data=json.dumps(dto_in.dict()))
     res.raise_for_status()
-    return res.json()
+    res = res.json()
+    return res
+
