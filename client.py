@@ -84,7 +84,7 @@ async def create_client(
         state: str = Form(...),
         city: str = Form(...),
         line1: str = Form(...),
-        line2: Optional[str] = Form(None),
+        line2: Optional[str] = Form(""),
         zip: str = Form(...)
     ):
     dto_in = CreateClientIn(
