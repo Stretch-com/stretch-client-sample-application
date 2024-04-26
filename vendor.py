@@ -65,7 +65,7 @@ class VendorProfileDetailedIn(BaseModel):
 
 router = APIRouter()
 session = requests.Session()
-base_url = os.getenv('STRETCH_PUBLIC_API_URL', 'http://localhost:8000/api/v1/public')
+base_url = os.getenv('STRETCH_PUBLIC_API_URL', 'https://api.stretch.com/api/v1/public')
 session.headers.update({
             "Content-Type": "application/json",
             "Api-Token": os.getenv('CLIENT_ID')
@@ -81,4 +81,4 @@ class JSONEncoder(json.JSONEncoder):
         return super().default(obj)
 @router.get("/vendor/{vendor_id}", response_model=VendorDetailedOut)
 async def get_vendor(dto_in: VendorIn = Depends()):
-    return session.get(f"/vendor/{dto_in.vendor_id}", params=dto_in.dict())
+    return session.get(f"{base_url}/vendor/{dto_in.vendor_id}", params=dto_in.dict()).json()

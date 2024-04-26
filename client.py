@@ -1,8 +1,5 @@
-import json
 import os
-from fastapi import Form, Request, APIRouter
-from fastapi.responses import HTMLResponse, Response
-from fastapi.templating import Jinja2Templates
+from fastapi import Form, APIRouter
 import requests
 from pydantic import Field, BaseModel, EmailStr
 from typing import Optional, Tuple
@@ -45,39 +42,13 @@ class CreateClientOut(BaseModel):
 # -------------------------------------------------------------------------------------------------
 
 
-class GenerateTemplate:
-    def __init__(self):
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        self.templates = Jinja2Templates(directory=f"{dir_path}/templates")
-
-    def execute(self, filename, content: dict):
-        content["base_url"] = (
-            f'{os.getenv("STRETCH_API_URL", "http://localhost/sample_application")}{os.getenv("STRETCH_API_PREFIX",  "/api/v1")}'  # noqa
-        )
-        try:
-            return self.templates.TemplateResponse(
-                filename,
-                content,
-            )
-        except Exception as e:
-            raise e
-
-
 router = APIRouter()
 session = requests.Session()
-base_url = os.getenv('STRETCH_PUBLIC_API_URL', 'http://localhost:8000/api/v1/public')
+base_url = os.getenv('STRETCH_PUBLIC_API_URL', 'https://api.stretch.com/api/v1/public')
 session.headers.update({
             "Content-Type": "application/json",
             "Api-Token": os.getenv('CLIENT_ID')
         })
-
-generate_template = GenerateTemplate()
-
-
-@router.get("/client/form", response_class=HTMLResponse)
-async def create_client_form(request: Request):
-    template = generate_template.execute("client_form.html", content={"request": request})
-    return template
 
 
 @router.post("/client", response_model=CreateClientOut)
@@ -114,7 +85,7 @@ async def create_client(
             zip=zip
         )
     )
-    res = session.post(f"{base_url}/client", data=json.dumps(dto_in.dict()))
+    res = session.post(f"{base_url}/client", json=dto_in.dict())
     res.raise_for_status()
     res = res.json()
     return res

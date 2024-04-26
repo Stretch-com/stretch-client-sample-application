@@ -123,7 +123,7 @@ class SearchOut(PaginationIn, BaseModel):
 
 router = APIRouter()
 session = requests.Session()
-base_url = os.getenv('STRETCH_PUBLIC_API_URL', 'http://localhost:8000/api/v1/public')
+base_url = os.getenv('STRETCH_PUBLIC_API_URL', 'https://api.stretch.com/api/v1/public')
 session.headers.update({
             "Content-Type": "application/json",
             "Api-Token": os.getenv('CLIENT_ID')
@@ -142,4 +142,4 @@ class JSONEncoder(json.JSONEncoder):
 
 @router.post("/search", response_model=SearchOut)
 async def search(dto_in: SearchIn):
-    return  session.post("/search", data=json.dumps(dto_in.dict(), cls=JSONEncoder))
+    return session.post(f"{base_url}/search", data=json.dumps(dto_in.dict(), cls=JSONEncoder)).json()
