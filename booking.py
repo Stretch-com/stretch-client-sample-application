@@ -68,15 +68,6 @@ session.headers.update({
         })
 
 
-class JSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, UUID):
-            return str(obj)
-        if isinstance(obj, datetime.datetime):
-            return str(obj)
-        return super().default(obj)
-
-
 @router.post(
     "/booking",
     status_code=status.HTTP_200_OK,
@@ -88,4 +79,4 @@ async def book_slots(params_in: BookSlotsIn):
     Book corresponding slot foo customer
     :param params_in: id of the coach/business
     """
-    return session.post(f"{base_url}/booking", data=json.dumps(params_in.dict(), cls=JSONEncoder)).json()
+    return session.post(f"{base_url}/booking", data=params_in.model_dump_json()).json()

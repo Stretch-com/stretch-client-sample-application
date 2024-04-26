@@ -22,6 +22,7 @@ class PaginationOut(PaginationIn):
 
 class SortOptions(str, Enum):
     RATING = "rating"
+    DISTANCE = "distance"
 
 
 class SortOrder(str, Enum):
@@ -130,16 +131,6 @@ session.headers.update({
         })
 
 
-class JSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, UUID):
-            return str(obj)
-        if isinstance(obj, datetime.datetime):
-            return str(obj)
-        return super().default(obj)
-
-
-
 @router.post("/search", response_model=SearchOut)
 async def search(dto_in: SearchIn):
-    return session.post(f"{base_url}/search", data=json.dumps(dto_in.dict(), cls=JSONEncoder)).json()
+    return session.post(f"{base_url}/search", data=dto_in.model_dump_json()).json()

@@ -46,15 +46,6 @@ session.headers.update({
         })
 
 
-class JSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, UUID):
-            return str(obj)
-        if isinstance(obj, datetime.datetime):
-            return str(obj)
-        return super().default(obj)
-
-
 @router.get("/categories", response_model=List[CategoryOut])
 async def get_categories():
     return session.get(f"{base_url}/categories").json()
