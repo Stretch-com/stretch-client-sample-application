@@ -3,10 +3,11 @@ from fastapi import APIRouter, status
 from typing import List, Optional
 import datetime
 from uuid import UUID
-from pydantic import BaseModel, Field
+from pydantic import Field
 import requests
 from enum import Enum
-import json
+
+from base_app_model import BaseAppModel
 
 
 # Enums
@@ -19,7 +20,7 @@ class PaymentStatus(str, Enum):
 # Models
 
 
-class SessionOut(BaseModel):
+class SessionOut(BaseAppModel):
     price: float = Field()
     # state: SessionState = Field()
     # currency: str = Field(default="USD")
@@ -41,18 +42,18 @@ class SessionOut(BaseModel):
     # report: PublicReportOut | None = Field(default=None)
 
 
-class Payment(BaseModel):
+class Payment(BaseAppModel):
     url: Optional[str]
     status: PaymentStatus
 
 
-class BookSlotsIn(BaseModel):
+class BookSlotsIn(BaseAppModel):
     user_id: UUID
     service_id: UUID
     slots: List[datetime.datetime]
 
 
-class BookSlotsOut(BaseModel):
+class BookSlotsOut(BaseAppModel):
     payment: Payment
     sessions: List[SessionOut]
 

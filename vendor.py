@@ -6,32 +6,34 @@ from uuid import UUID
 
 import requests
 from fastapi import APIRouter, Depends
-from pydantic import Field, BaseModel
+from pydantic import Field
+
+from base_app_model import BaseAppModel
 
 
 # Models
 
-class GalleryItemOut(BaseModel):
+class GalleryItemOut(BaseAppModel):
     url: str = Field()
     thumbnail_url: str = Field()
     type: str = Field()
 
 
-class Service(BaseModel):
+class Service(BaseAppModel):
     id: UUID = Field()
     name: str = Field()
     description: str = Field()
     price: float = Field()
-    price_per_session: float = Field(alias="pricePerSession")
-    price_currency: str = Field(alias="priceCurrency")
+    price_per_session: float = Field()
+    price_currency: str = Field()
 
 
-class Review(BaseModel):
+class Review(BaseAppModel):
     message: str = Field()
     label: str = Field()
 
 
-class VendorIn(BaseModel):
+class VendorIn(BaseAppModel):
     vendor_id: UUID = Field(default=None)
 
 
@@ -46,7 +48,7 @@ class VendorShortOut(VendorIn):
     rating: Optional[float] = Field(default=None)
 
 
-class VendorDetailedOut(BaseModel):
+class VendorDetailedOut(BaseAppModel):
     name: Optional[str] = Field(default=None)
     profile_image_url: Optional[str] = Field(default=None)
     gallery: List[GalleryItemOut] = Field(default=[])
@@ -58,7 +60,7 @@ class VendorDetailedOut(BaseModel):
     services: List[Service] = Field(default=[])
 
 
-class VendorProfileDetailedIn(BaseModel):
+class VendorProfileDetailedIn(BaseAppModel):
     vendor_id: UUID
 # -------------------------------------------------------------------------------------------------
 

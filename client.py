@@ -1,13 +1,16 @@
 import os
 from fastapi import Form, APIRouter
 import requests
-from pydantic import Field, BaseModel, EmailStr
+from pydantic import Field, EmailStr
 from typing import Optional, Tuple
+
+from base_app_model import BaseAppModel
+
 
 # Models
 
 
-class LocationIn(BaseModel):
+class LocationIn(BaseAppModel):
     coord: Optional[Tuple[float, float]] = Field()
     country: str = Field(example="United Arab Emirates", description="Country")
     state: str = Field(example="Dubai", description="state")
@@ -17,7 +20,7 @@ class LocationIn(BaseModel):
     zip: str = Field(example=None, description="zip (po box)")
 
 
-class EditClientIn(BaseModel):
+class EditClientIn(BaseAppModel):
     username: str = Field()
     first_name: str = Field()
     last_name: str = Field()
@@ -30,7 +33,7 @@ class CreateClientIn(EditClientIn):
     external_id: Optional[str] = Field()
 
 
-class CreateClientOut(BaseModel):
+class CreateClientOut(BaseAppModel):
     external_id: Optional[str] = Field(alias="externalId")
     username: str = Field()
     first_name: str = Field(alias="firstName")
