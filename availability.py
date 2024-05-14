@@ -7,7 +7,10 @@ import datetime
 from typing import Optional
 from uuid import UUID
 from enum import Enum
-from pydantic import Field, BaseModel
+from pydantic import Field
+
+from base_app_model import BaseAppModel
+
 
 # Models
 
@@ -17,15 +20,15 @@ class TimezoneOptions(str, Enum):
     AUTO = "auto"
 
 
-class AvailabilityIn(BaseModel):
+class AvailabilityIn(BaseAppModel):
     service_id: UUID = Field(examples=["cae6a37d-fab6-4242-b1a5-4b8eb3a00efa"])
-    start_search: Optional[datetime.date] = Field(default=None, examples=["2024-05-05 07:00:00.608 +0400"], alias="startSearch")
-    end_search: Optional[datetime.date] = Field(default=None, examples=["2024-05-05 07:00:00.608 +0400"], alias="endSearch")
+    start_search: Optional[datetime.date] = Field(default=None, examples=["2024-05-05 07:00:00.608 +0400"])
+    end_search: Optional[datetime.date] = Field(default=None, examples=["2024-05-05 07:00:00.608 +0400"])
     timezone: Optional[TimezoneOptions] = Field(default=TimezoneOptions.AUTO)
 
 
-class AvailabilityOut(BaseModel):
-    slot_start: datetime.datetime = Field(alias="slotStart")
+class AvailabilityOut(BaseAppModel):
+    slot_start: datetime.datetime = Field()
 
 # -------------------------------------------------------------------------------------------------
 

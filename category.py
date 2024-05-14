@@ -1,16 +1,17 @@
 import os
-import json
-import datetime
 from uuid import UUID
 from typing import List
 import requests
 from fastapi import APIRouter
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from base_app_model import BaseAppModel
+
 
 # Models
 
 
-class CategoryOut(BaseModel):
+class CategoryOut(BaseAppModel):
     id: UUID = Field(title="Category id", description="Category id in our system")
     name: str = Field(
         default=None,
