@@ -34,10 +34,10 @@ class CreateClientIn(EditClientIn):
 
 
 class CreateClientOut(BaseAppModel):
-    external_id: Optional[str] = Field(alias="externalId")
+    external_id: Optional[str] = Field()
     username: str = Field()
-    first_name: str = Field(alias="firstName")
-    last_name: str = Field(alias="lastName")
+    first_name: str = Field()
+    last_name: str = Field()
     email: EmailStr = Field()
     phone: str = Field()
     location: Optional[LocationIn] = Field(default_factory=LocationIn)
