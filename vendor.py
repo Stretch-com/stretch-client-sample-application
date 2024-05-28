@@ -81,6 +81,6 @@ class JSONEncoder(json.JSONEncoder):
         if isinstance(obj, datetime.datetime):
             return str(obj)
         return super().default(obj)
-@router.get("/vendor/{vendor_id}", response_model=VendorDetailedOut)
+@router.get("/vendor/{vendorId}", response_model=VendorDetailedOut)
 async def get_vendor(dto_in: VendorIn = Depends()):
     return session.get(f"{base_url}/vendor/{dto_in.vendor_id}", params=dto_in.dict()).json()
