@@ -7,7 +7,7 @@ from search import router as search_router
 from vendor import router as vendor_router
 
 app = FastAPI()
-app.include_router(client_router)
+# app.include_router(client_router)
 app.include_router(category_router)
 app.include_router(search_router)
 app.include_router(vendor_router)

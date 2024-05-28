@@ -1,9 +1,9 @@
 import os
 from fastapi import APIRouter, status
-from typing import List, Optional
+from typing import List, Optional, Tuple
 import datetime
 from uuid import UUID
-from pydantic import Field
+from pydantic import Field, EmailStr
 import requests
 from enum import Enum
 
@@ -18,6 +18,9 @@ class PaymentStatus(str, Enum):
 
 
 # Models
+class Coordinates(BaseAppModel):
+    latitude: float = Field(examples=[42.3243], description="Latitude on the map")
+    longitude: float = Field(examples=[58.7123], description="Longitude on the map")
 
 
 class SessionOut(BaseAppModel):
@@ -47,15 +50,58 @@ class Payment(BaseAppModel):
     status: PaymentStatus
 
 
-class BookSlotsIn(BaseAppModel):
-    user_id: UUID
-    service_id: UUID
-    slots: List[datetime.datetime]
-
-
 class BookSlotsOut(BaseAppModel):
     payment: Payment
     sessions: List[SessionOut]
+
+
+class LocationIn(BaseAppModel):
+    coord: Coordinates = Field(default_factory=Coordinates)
+    country: str = Field(example="United Arab Emirates", description="Country")
+    state: str = Field(example="Dubai", description="state")
+    city: str = Field(example="Dubai", description="city")
+    line1: str = Field(example="Jumeirah Lake Towers", description="line 1")
+    line2: Optional[str] = Field(default="", description="line 2")
+    zip: str = Field(example=None, description="zip (po box)")
+
+
+class EditClientIn(BaseAppModel):
+    username: str = Field()
+    first_name: str = Field()
+    last_name: str = Field()
+    email: EmailStr = Field()
+    phone: str = Field()
+    location: Optional[LocationIn] = Field(default_factory=LocationIn)
+
+
+class CreateClientIn(EditClientIn):
+    external_id: Optional[str] = Field()
+
+
+class CreateClientOut(BaseAppModel):
+    external_id: Optional[str] = Field()
+    username: str = Field()
+    first_name: str = Field()
+    last_name: str = Field()
+    email: EmailStr = Field()
+    phone: str = Field()
+    location: Optional[LocationIn] = Field(default_factory=LocationIn)
+
+
+class EditCustomerProfileIn:
+    external_id: str = Field(description="Id of a user in your system")
+    username: str = Field(description="Username of the user")
+    first_name: str = Field(description="First name of the user")
+    last_name: str = Field(description="Last name of the user")
+    email: EmailStr = Field(description="Email of the user")
+    phone: str = Field(description="Last name of the user")
+    location: LocationIn = Field(default_factory=LocationIn, description="Location of the user")
+
+
+class BookSlotsIn(CreateClientIn):
+    user_id: UUID
+    service_id: UUID
+    slots: List[datetime.datetime]
 
 # -------------------------------------------------------------------------------------------------
 
