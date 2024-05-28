@@ -43,7 +43,7 @@ session.headers.update({
 
 
 @router.get(
-    "/availability/{service_id}",
+    "/availability/{serviceId}",
     response_model=List[AvailabilityOut]
 )
 async def get_availability(
