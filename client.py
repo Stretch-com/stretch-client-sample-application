@@ -1,5 +1,5 @@
 import os
-from fastapi import Form, APIRouter
+from fastapi import APIRouter, Depends
 import requests
 from pydantic import Field, EmailStr
 from typing import Optional, Tuple
@@ -42,6 +42,23 @@ class CreateClientOut(BaseAppModel):
     phone: str = Field()
     location: Optional[LocationIn] = Field(default_factory=LocationIn)
 
+
+class CreateClientDTO(BaseAppModel):
+    external_id: str = Field(...)
+    username: str
+    first_name: str = Field(...)
+    last_name: str = Field(...)
+    email: str
+    phone: str
+    country: str
+    latitude: str
+    longitude: str
+    state: str
+    city: str
+    line1: str
+    line2: Optional[str] = ""
+    zip: str
+
 # -------------------------------------------------------------------------------------------------
 
 
@@ -54,38 +71,23 @@ session.headers.update({
         })
 
 
-@router.post("/client", response_model=CreateClientOut)
-async def create_client(
-        external_id: str = Form(...),
-        username: str = Form(...),
-        first_name: str = Form(...),
-        last_name: str = Form(...),
-        email: str = Form(...),
-        phone: str = Form(...),
-        country: str = Form(...),
-        latitude: str = Form(...),
-        longitude: str = Form(...),
-        state: str = Form(...),
-        city: str = Form(...),
-        line1: str = Form(...),
-        line2: Optional[str] = Form(""),
-        zip: str = Form(...)
-    ):
+@router.put("/client", response_model=CreateClientOut)
+async def edit_client(dto_in: CreateClientDTO = Depends()):
     dto_in = CreateClientIn(
-        external_id=external_id,
-        username=username,
-        first_name=first_name,
-        last_name=last_name,
-        email=email,
-        phone=phone,
+        external_id=dto_in.external_id,
+        username=dto_in.username,
+        first_name=dto_in.first_name,
+        last_name=dto_in.last_name,
+        email=dto_in.email,
+        phone=dto_in.phone,
         location=LocationIn(
-            coord=[latitude, longitude],
-            country=country,
-            city=city,
-            state=state,
-            line1=line1,
-            line2=line2,
-            zip=zip
+            coord=[dto_in.latitude, dto_in.longitude],
+            country=dto_in.country,
+            city=dto_in.city,
+            state=dto_in.state,
+            line1=dto_in.line1,
+            line2=dto_in.line2,
+            zip=dto_in.zip
         )
     )
     res = session.post(f"{base_url}/client", json=dto_in.dict())
