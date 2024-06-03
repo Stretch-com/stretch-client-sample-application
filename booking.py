@@ -65,7 +65,8 @@ class LocationIn(BaseAppModel):
     zip: str = Field(example=None, description="zip (po box)")
 
 
-class EditClientIn(BaseAppModel):
+class EditCustomerIn(BaseAppModel):
+    customer_id: str = Field()
     username: str = Field()
     first_name: str = Field()
     last_name: str = Field()
@@ -74,22 +75,12 @@ class EditClientIn(BaseAppModel):
     location: Optional[LocationIn] = Field(default_factory=LocationIn)
 
 
-class CreateClientIn(EditClientIn):
-    external_id: Optional[str] = Field()
-
-
-class CreateClientOut(BaseAppModel):
-    external_id: Optional[str] = Field()
-    username: str = Field()
-    first_name: str = Field()
-    last_name: str = Field()
-    email: EmailStr = Field()
-    phone: str = Field()
-    location: Optional[LocationIn] = Field(default_factory=LocationIn)
+class CreateCustomerIn(EditCustomerIn):
+    customer_id: Optional[str] = Field()
 
 
 class EditCustomerProfileIn:
-    external_id: str = Field(description="Id of a user in your system")
+    customer_id: str = Field(description="Id of a user in your system")
     username: str = Field(description="Username of the user")
     first_name: str = Field(description="First name of the user")
     last_name: str = Field(description="Last name of the user")
@@ -98,8 +89,7 @@ class EditCustomerProfileIn:
     location: LocationIn = Field(default_factory=LocationIn, description="Location of the user")
 
 
-class BookSlotsIn(CreateClientIn):
-    user_id: UUID
+class BookSlotsIn(CreateCustomerIn):
     service_id: UUID
     slots: List[datetime.datetime]
 
