@@ -34,7 +34,7 @@ function useAPI(route, body = null, enabled = true) {
 
   useEffect(() => {
     if (enabled) {
-      fetchData(route, {})
+      fetchData(route, {}, body)
         .then((d) => {
           setData(d);
         })
