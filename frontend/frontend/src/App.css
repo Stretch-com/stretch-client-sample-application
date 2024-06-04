@@ -1,0 +1,33 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+header {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.subcategories,
+.categories {
+  display: flex;
+  flex-direction: column;
+  column-gap: 2rem;
+  align-items: start;
+}
+
+.subcategories {
+  border-top: 1px solid #1a1a1a;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 1rem;
+  border-color: #646cff;
+}

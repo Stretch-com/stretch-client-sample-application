@@ -1,0 +1,16 @@
+.vendor-services {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+}
+
+.vendor-service {
+  text-align: start;
+  background-color: rgb(246, 248, 251);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.vendor-service:hover {
+  cursor: pointer;
+}

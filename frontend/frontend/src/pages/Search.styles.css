@@ -1,0 +1,11 @@
+.search {
+  display: grid;
+  grid-template: "a b" / 0.5fr 1.5fr;
+  align-items: start;
+  justify-items: start;
+  justify-content: start;
+}
+
+.search-box {
+  min-width: 800px;
+}
