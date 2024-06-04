@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useAPI from "../hooks/useApi";
 
+import { fetchData } from "../hooks/useApi";
 import "./Profile.styles.css";
 
 function Service({ profile }) {
   const { serviceId } = useParams();
-
   const [slots, setSlots] = useState(null);
-
-  const { data } = useAPI(`/availability/${serviceId}`, null, slots == null);
   const [booking, setBooking] = useState(null);
 
   useEffect(() => {
-    console.log("data:", data);
-    setSlots(data);
-  }, [data]);
+    fetchData(`/availability/${serviceId}`).then((data) => {
+      console.log(data);
+      setSlots(data);
+    });
+  }, []);
 
   const navigate = useNavigate();
 
@@ -33,7 +32,7 @@ function Service({ profile }) {
       firstName: "Bob",
       lastName: "Tester",
       email: "bob@example.com",
-      phone: "+999121231212",
+      phone: "+999121231200",
       location: {
         coord: {
           latitude: 25,
@@ -50,27 +49,32 @@ function Service({ profile }) {
       serviceId: serviceId,
     };
     setBooking(bookingData);
+
+    fetchData("/booking", {}, bookingData).then((data) => {
+      console.log(data);
+    });
   };
 
   //   console.log("booking_data", booking_data);
 
-  //   console.log(profile);
+  console.log(profile);
   if (slots) {
     return (
       <div className="slots">
-        <h1>{slots?.name}</h1>
+        <h1>{1}</h1>
         <div></div>
         <h2>Slots</h2>
         <div className="vendor-services">
           {slots &&
             slots.map((s, i) => {
               return (
-                <div
+                <button
+                  className="vendor-service"
                   key={s.slotStart}
-                  onClick={handlerBooking(s.id, [s.slotStart])}
+                  onClick={() => handlerBooking(serviceId, [s.slotStart])}
                 >
                   {convertDate(s.slotStart)}
-                </div>
+                </button>
               );
             })}
         </div>
