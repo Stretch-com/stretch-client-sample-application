@@ -27,12 +27,12 @@ function Service({ profile }) {
 
   const handlerBooking = (serviceId, slots) => {
     const bookingData = {
-      customerId: "1",
+      customerId: "2",
       username: "TestUser",
       firstName: "Bob",
       lastName: "Tester",
       email: "bob@example.com",
-      phone: "+999121231200",
+      phone: "+999121231211",
       location: {
         coord: {
           latitude: 25,

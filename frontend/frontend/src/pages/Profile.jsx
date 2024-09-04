@@ -46,6 +46,7 @@ function Profile({ profile }) {
                   >
                     {s.price} {s.priceCurrency}
                   </p>
+                  <small>{s.id}</small>
                 </div>
               );
             })}
